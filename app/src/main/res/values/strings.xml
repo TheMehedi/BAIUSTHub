@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">BAIUSTHub</string>
+    <string name="no_account_sign_up">NO ACCOUNT? <b>SIGN UP</b></string>
+    <string name="already_have_an_account_sign_in">ALREADY HAVE AN ACCOUNT <b>SIGN IN</b></string>
+</resources>
