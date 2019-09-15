@@ -11,7 +11,8 @@
             android:layout_height="160dp"
             android:src="@drawable/logo"
             android:layout_gravity="center"
-            android:layout_marginTop="60dp" />
+            android:layout_marginTop="60dp"
+            android:contentDescription="@string/todo" />
 
         <TextView
             android:layout_width="match_parent"
@@ -32,13 +33,17 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:src="@drawable/user"
-                android:layout_marginStart="36dp"/>
+                android:layout_marginStart="36dp"
+                android:contentDescription="@string/todo" />
 
             <EditText
+                android:id="@+id/loginUserName"
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
                 android:layout_marginEnd="36dp"
-                android:backgroundTint="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimary"
+                android:backgroundTint="@color/colorPrimary"
+                android:inputType="textEmailAddress"/>
 
         </LinearLayout>
 
@@ -63,13 +68,17 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:src="@drawable/lock"
-                android:layout_marginStart="36dp"/>
+                android:layout_marginStart="36dp"
+                android:contentDescription="@string/todo"/>
 
             <EditText
+                android:id="@+id/loginPassword"
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
                 android:layout_marginEnd="36dp"
-                android:backgroundTint="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimary"
+                android:backgroundTint="@color/colorPrimary"
+                android:inputType="textPassword"/>
 
         </LinearLayout>
 
@@ -86,6 +95,7 @@
             android:layout_gravity="center"/>
 
         <TextView
+            android:id="@+id/forgetPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="FORGOT PASSWORD?"
