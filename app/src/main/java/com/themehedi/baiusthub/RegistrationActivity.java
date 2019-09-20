@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -24,7 +25,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -95,7 +99,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 //uses email for creation of default user name until '@' founded
                 String personUserName = personEmail.substring(0, personEmail.indexOf("@"));
 
-                //Toast.makeText(this, personName + personEmail + personPassword + personUserName + rPhoneNumber, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, personEmail + personPassword + personUserName, Toast.LENGTH_SHORT).show();
 
 
                 new AccountSetup(RegistrationActivity.this).execute(personEmail, personPassword, personUserName);
@@ -122,6 +126,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         //AlertDialog dialog;
         Context context;
+        String datas = "";
 
         AccountSetup(Context context) {
             this.context = context;
@@ -158,8 +163,8 @@ public class RegistrationActivity extends AppCompatActivity {
                 OutputStream ops = http.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(ops, StandardCharsets.UTF_8));
                 String data = URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(personEmail, "UTF-8")
-                        +"&&"+URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(personPassword, "UTF-8")
-                        +"&&"+URLEncoder.encode("username", "UTF-8") + "=" + URLEncoder.encode(personUserName, "UTF-8");
+                        + "&&" + URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(personPassword, "UTF-8")
+                        + "&&" + URLEncoder.encode("username", "UTF-8") + "=" + URLEncoder.encode(personUserName, "UTF-8");
                 writer.write(data);
                 writer.flush();
                 writer.close();
@@ -171,19 +176,18 @@ public class RegistrationActivity extends AppCompatActivity {
                 while ((line = reader.readLine()) != null) {
                     result.append(line);
                 }
+                datas = result.toString();
                 reader.close();
                 ips.close();
                 http.disconnect();
-                return result.toString();
 
 
-            } catch (IOException e) {
-                result = new StringBuilder(e.getMessage());
+            }catch (IOException e) {
+                e.printStackTrace();
             }
 
 
-
-            return result.toString();
+            return datas;
 
         }
 
@@ -193,51 +197,9 @@ public class RegistrationActivity extends AppCompatActivity {
             //dialog.setMessage(s);
             //dialog.show();
 
-            Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
-
-            try {
-
-                JSONObject userObject = new JSONObject(s);
-                final String id = userObject.getString("id");
-                final String emailstatus = userObject.getString("emailstatus");
-                final String status = userObject.getString("status");
-                final String femail = userObject.getString("email");
-                final String fpassword = userObject.getString("password");
-                final String username = userObject.getString("username");
-
-                if("emailexist".equals(emailstatus)){
-
-                    Toast.makeText(context, "This email is in use by another account!", Toast.LENGTH_SHORT).show();
-                }
+            Toast.makeText(context, Html.fromHtml(s), Toast.LENGTH_SHORT).show();
 
 
-
-                else if("yes".equals(status)){
-
-                    String textusername = email.getText().toString();
-                    String textpassword = password.getText().toString();
-
-                    if(textusername.equals(femail) && textpassword.equals(fpassword)){
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("username",username);
-                        editor.putString("password",textpassword);
-                        editor.putString("email",textusername);
-                        editor.putString("id",id);
-                        editor.apply();
-                        Toast.makeText(getApplicationContext(), "Registration Successful",Toast.LENGTH_SHORT).show();
-                        SendUserToMainActivity();
-                    }
-
-                }
-
-                else{
-
-                    Toast.makeText(context, "Credentials are not valid!", Toast.LENGTH_SHORT).show();
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
 
         }
 
