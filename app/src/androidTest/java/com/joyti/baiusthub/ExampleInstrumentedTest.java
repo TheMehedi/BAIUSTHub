@@ -1,4 +1,4 @@
-package com.themehedi.baiusthub;
+package com.joyti.baiusthub;
 
 import android.content.Context;
 
