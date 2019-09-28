@@ -30,6 +30,7 @@
                 android:layout_gravity="center"/>
 
             <ImageButton
+                android:id="@+id/profileBtn"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginEnd="16dp"

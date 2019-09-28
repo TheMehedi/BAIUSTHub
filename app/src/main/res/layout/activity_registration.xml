@@ -116,11 +116,11 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/registrationBtn"
+            android:id="@+id/nextBtn"
             android:layout_width="220dp"
             android:layout_height="40dp"
             android:layout_marginTop="28dp"
-            android:text="Sign up"
+            android:text="Next"
             android:textSize="18sp"
             android:textColor="@android:color/white"
             android:background="@drawable/rectangle_bg"
