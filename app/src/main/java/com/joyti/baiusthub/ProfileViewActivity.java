@@ -71,6 +71,10 @@ public class ProfileViewActivity extends AppCompatActivity {
         new CurrentP(getApplicationContext()).execute();
     }
 
+    public void backBtn(View view) {
+
+        onBackPressed();
+    }
 
 
     private class CurrentP extends AsyncTask<String, Void,String> {

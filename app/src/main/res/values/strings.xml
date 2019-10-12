@@ -3,4 +3,54 @@
     <string name="no_account_sign_up">NO ACCOUNT? <b>SIGN UP</b></string>
     <string name="already_have_an_account_sign_in">ALREADY HAVE AN ACCOUNT <b>SIGN IN</b></string>
     <string name="todo">TODO</string>
+
+
+
+    <string-array name="department">
+
+        <item></item>
+        <item>CSE</item>
+        <item>EEE</item>
+        <item>CE</item>
+        <item>BA</item>
+        <item>English</item>
+        <item>SH</item>
+        <item>Law</item>
+
+    </string-array>
+
+    <string-array name="file_category">
+
+        <item></item>
+        <item>Presentation Slide</item>
+        <item>Lecture Notes</item>
+        <item>Previous Questions</item>
+    </string-array>
+
+
+    <string-array name="teacher">
+
+        <item></item>
+        <item>Mamun</item>
+        <item>Ibrahim</item>
+        <item>Abdus Sattar</item>
+        <item>Sheikh Hasan</item>
+        <item>And so on</item>
+
+    </string-array>
+
+
+    <string-array name="course">
+
+        <item></item>
+        <item>Algorithm</item>
+        <item>Data Structure</item>
+        <item>EEE 1</item>
+        <item>Computer Fundamental</item>
+        <item>English</item>
+        <item>Accounting</item>
+        <item>Discreate Math</item>
+    </string-array>
+
+
 </resources>

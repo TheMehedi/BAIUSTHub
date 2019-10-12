@@ -20,13 +20,14 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="BAIUST Hub"
                 android:layout_weight="1"
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:layout_gravity="center"/>
 
             <ImageButton
@@ -39,6 +40,12 @@
         </LinearLayout>
 
     </androidx.appcompat.widget.Toolbar>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -56,10 +63,11 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/exploreFile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="4dp"
@@ -85,10 +93,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/uploadFile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="8dp"
@@ -121,6 +130,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/aboutApp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
