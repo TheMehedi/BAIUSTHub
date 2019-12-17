@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -200,25 +201,39 @@ public class UploadFileActivity extends AppCompatActivity {
 
                 if(!department.equals("") && !course.equals("") && !teacher.equals("") && !category.equals("") && FileList != null){
 
-                    //new UploadFile(UploadFileActivity.this).execute();
 
                     for(int j = 0; j<FileList.size(); j++){
 
                         Uri PerFile = FileList.get(j);
 
-                        StorageReference folder = FirebaseStorage.getInstance().getReference().child(department);
-                        StorageReference filename = folder.child(generateRandomString(10) + ExtensionList.get(j));
+                        final String uniqname = generateRandomString(10) + ExtensionList.get(j);
+                        final String name = NameList.get(j);
 
-                        Toast.makeText(UploadFileActivity.this, ExtensionList.get(j), Toast.LENGTH_SHORT).show();
+                        StorageReference folder = FirebaseStorage.getInstance().getReference().child(department);
+                        final StorageReference filename = folder.child(uniqname);
+
+                        //Toast.makeText(UploadFileActivity.this, ExtensionList.get(j), Toast.LENGTH_SHORT).show();
                         filename.putFile(PerFile).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                                Toast.makeText(UploadFileActivity.this, "Uploaded!", Toast.LENGTH_SHORT).show();
+                                filename.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+
+                                        new UploadFile(getApplicationContext()).execute(uri.toString(), uniqname, name);
+
+                                        //Toast.makeText(UploadFileActivity.this, uri.toString() + uniqname, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+
                             }
                         });
                     }
 
+                    Toast.makeText(UploadFileActivity.this, "All File Uploaded Successfully!", Toast.LENGTH_SHORT).show();
+                    onBackPressed();
 
                 }
 
@@ -295,7 +310,7 @@ public class UploadFileActivity extends AppCompatActivity {
 
                         String extension = filename.substring(filename.lastIndexOf("."));
 
-                        Toast.makeText(this, extension, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(this, extension, Toast.LENGTH_SHORT).show();
                         FileList.add(file);
                         NameList.add(filename);
                         ExtensionList.add(extension);
@@ -306,7 +321,6 @@ public class UploadFileActivity extends AppCompatActivity {
 
                 else {
 
-                    FileList.add(data.getData());
                     chooseFileText.setText("1 files");
 
                     Uri file = data.getData();
@@ -326,7 +340,7 @@ public class UploadFileActivity extends AppCompatActivity {
 
 
                     String extension = filename.substring(filename.lastIndexOf("."));
-                    Toast.makeText(this, extension, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, extension, Toast.LENGTH_SHORT).show();
                     FileList.add(file);
                     NameList.add(filename);
                     ExtensionList.add(extension);
@@ -338,6 +352,8 @@ public class UploadFileActivity extends AppCompatActivity {
             }
         }
     }
+
+
 
     private class UploadFile extends AsyncTask<String, Void,String> {
 
@@ -360,7 +376,9 @@ public class UploadFileActivity extends AppCompatActivity {
         protected String doInBackground(String... parameter) {
 
             String check_user_url = "http://baiusthub.mygamesonline.org/upload_file.php";
-
+            String uri = parameter[0];
+            String uniqname = parameter[1];
+            String name = parameter[2];
 
             StringBuilder result = new StringBuilder();
 
@@ -374,11 +392,14 @@ public class UploadFileActivity extends AppCompatActivity {
 
                 OutputStream ops = http.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(ops, StandardCharsets.UTF_8));
-                String data = URLEncoder.encode("file", "UTF-8") + "=" + URLEncoder.encode(img, "UTF-8")
+                String data = URLEncoder.encode("user_id", "UTF-8") + "=" + URLEncoder.encode(user_id, "UTF-8")
                         + "&&" + URLEncoder.encode("department", "UTF-8") + "=" + URLEncoder.encode(department, "UTF-8")
                         + "&&" + URLEncoder.encode("course", "UTF-8") + "=" + URLEncoder.encode(course, "UTF-8")
                         + "&&" + URLEncoder.encode("teacher", "UTF-8") + "=" + URLEncoder.encode(teacher, "UTF-8")
-                        + "&&" + URLEncoder.encode("category", "UTF-8") + "=" + URLEncoder.encode(category, "UTF-8");
+                        + "&&" + URLEncoder.encode("category", "UTF-8") + "=" + URLEncoder.encode(category, "UTF-8")
+                        + "&&" + URLEncoder.encode("uri", "UTF-8") + "=" + URLEncoder.encode(uri, "UTF-8")
+                        + "&&" + URLEncoder.encode("uniqname", "UTF-8") + "=" + URLEncoder.encode(uniqname, "UTF-8")
+                        + "&&" + URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(name, "UTF-8");
                 writer.write(data);
                 writer.flush();
                 writer.close();
