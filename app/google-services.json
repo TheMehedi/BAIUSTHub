@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "820379213062",
+    "firebase_url": "https://baiusthub-4d49f.firebaseio.com",
+    "project_id": "baiusthub-4d49f",
+    "storage_bucket": "baiusthub-4d49f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:820379213062:android:7631f9da01962a03971287",
+        "android_client_info": {
+          "package_name": "com.joyti.baiusthub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "820379213062-u17slhn73mrovur5o69j3nqjt6gn37ru.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.joyti.baiusthub",
+            "certificate_hash": "279d9bfc93fb91bef472fbcdeca52246622d58ae"
+          }
+        },
+        {
+          "client_id": "820379213062-oh2kqb8u3e84ahokd36o2a5gc3l7mjju.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcnI4IRHwE0ulv-gxNn9LkzjtAgFZDnOY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "820379213062-oh2kqb8u3e84ahokd36o2a5gc3l7mjju.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

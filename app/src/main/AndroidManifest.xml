@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".UploadFileActivity"></activity>
+        <activity android:name=".ExploreFileActivity"></activity>
+        <activity android:name=".UploadFileActivity" />
         <activity android:name=".ProfileViewActivity" />
         <activity android:name=".ProfileSetupActivity" />
         <activity android:name=".RegistrationActivity" />

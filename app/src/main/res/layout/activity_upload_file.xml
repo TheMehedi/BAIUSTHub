@@ -203,9 +203,7 @@
                 android:layout_height="36dp"
                 android:layout_weight="1"
                 android:layout_marginStart="16dp"
-                android:gravity="center"
-                android:textAlignment="viewStart"
-                android:hint="file name"/>
+                android:gravity="center"/>
 
             <Button
                 android:id="@+id/chooseFileBtn"

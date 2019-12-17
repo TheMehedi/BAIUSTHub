@@ -25,12 +25,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -40,20 +46,29 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class UploadFileActivity extends AppCompatActivity {
 
+    private static final int PICK_FILE = 1;
+    private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private Button chooseFilebtn, uploadBtn;
     private TextView chooseFileText;
-    private Bitmap bitmap, converetdImage;
-    private String img = "null", stringImage, user_id, department, course, teacher, category;
-    private Uri imageUri;
+    private String img = "null", user_id, department, course, teacher, category;
+    private ArrayList<Uri> FileList = new ArrayList<>();
+    private ArrayList<String> NameList = new ArrayList<>();
+    private ArrayList<String> ExtensionList = new ArrayList<>();
+    private SharedPreferences sharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_file);
 
+        sharedPreferences = getSharedPreferences("user_details", MODE_PRIVATE);
+        user_id = sharedPreferences.getString("id",null);
 
         //declaration
         chooseFilebtn = findViewById(R.id.chooseFileBtn);
@@ -177,14 +192,33 @@ public class UploadFileActivity extends AppCompatActivity {
             }
         });
 
+
         uploadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
 
-                if(!department.equals("") && !course.equals("") && !teacher.equals("") && !category.equals("")){
+                if(!department.equals("") && !course.equals("") && !teacher.equals("") && !category.equals("") && FileList != null){
 
-                    new UploadFile(UploadFileActivity.this).execute();
+                    //new UploadFile(UploadFileActivity.this).execute();
+
+                    for(int j = 0; j<FileList.size(); j++){
+
+                        Uri PerFile = FileList.get(j);
+
+                        StorageReference folder = FirebaseStorage.getInstance().getReference().child(department);
+                        StorageReference filename = folder.child(generateRandomString(10) + ExtensionList.get(j));
+
+                        Toast.makeText(UploadFileActivity.this, ExtensionList.get(j), Toast.LENGTH_SHORT).show();
+                        filename.putFile(PerFile).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                                Toast.makeText(UploadFileActivity.this, "Uploaded!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
 
                 }
 
@@ -208,105 +242,102 @@ public class UploadFileActivity extends AppCompatActivity {
             return;
         }
 
-        pickImage();
+        ExtensionList.clear();
+        NameList.clear();
+        FileList.clear();
+        pickFile();
     }
 
 
-    private void pickImage() {
+    private void pickFile() {
 
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        startActivityForResult(intent, 1);
+        intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        startActivityForResult(intent, PICK_FILE);
 
     }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == RESULT_OK && data != null){
 
-                Uri path = data.getData();
-                imageUri = path;
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), path);
-                    converetdImage = getResizedBitmap(bitmap, 100);
-                    stringImage = imageToString();
+        if(requestCode == PICK_FILE){
+
+            if(resultCode == RESULT_OK){
+
+                if(data.getClipData() != null){
+
+                    int count = data.getClipData().getItemCount();
+
+                    chooseFileText.setText(count + " files");
+
+                    int i = 0;
+
+                    while ((i < count)){
+
+                        Uri file = data.getClipData().getItemAt(i).getUri();
+                        String filename = "";
+                        File name = new File(file.toString());
+
+                        if (file.toString().startsWith("content://")) {
+                            try (Cursor cursor = getApplicationContext().getContentResolver().query(file, null, null, null, null)) {
+                                if (cursor != null && cursor.moveToFirst()) {
+                                    filename = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                                }
+                            }
+                        } else if (file.toString().startsWith("file://")) {
+                            filename = name.getName();
+                        }
 
 
-                } catch (IOException e) {
-                    e.printStackTrace();
+                        String extension = filename.substring(filename.lastIndexOf("."));
+
+                        Toast.makeText(this, extension, Toast.LENGTH_SHORT).show();
+                        FileList.add(file);
+                        NameList.add(filename);
+                        ExtensionList.add(extension);
+                        i++;
+                    }
+
                 }
 
+                else {
+
+                    FileList.add(data.getData());
+                    chooseFileText.setText("1 files");
+
+                    Uri file = data.getData();
+
+                    String filename = "";
+                    File name = new File(file.toString());
+
+                    if (file.toString().startsWith("content://")) {
+                        try (Cursor cursor = getApplicationContext().getContentResolver().query(file, null, null, null, null)) {
+                            if (cursor != null && cursor.moveToFirst()) {
+                                filename = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                            }
+                        }
+                    } else if (file.toString().startsWith("file://")) {
+                        filename = name.getName();
+                    }
 
 
-        }
-
-        showImages();
-
-        chooseFileText.setText(getFileName(imageUri));
-    }
-
-    private void showImages() {
-
-
-            img = stringImage;
-
-
-    }
-
-    private String imageToString(){
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 20, byteArrayOutputStream);
-        byte[] imgByte = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(imgByte,Base64.DEFAULT);
-    }
-
-
-    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        float bitmapRatio = (float)width / (float) height;
-        if (bitmapRatio > 1) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
-        } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true);
-    }
-
-
-
-    public String getFileName(Uri uri) {
-        String result = null;
-        if (uri.getScheme().equals("content")) {
-            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-            try {
-                if (cursor != null && cursor.moveToFirst()) {
-                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                    String extension = filename.substring(filename.lastIndexOf("."));
+                    Toast.makeText(this, extension, Toast.LENGTH_SHORT).show();
+                    FileList.add(file);
+                    NameList.add(filename);
+                    ExtensionList.add(extension);
+                    /*File filename= new File(data.getData().getPath());
+                    String extension = filename.getName().substring(filename.getName().lastIndexOf(".") + 1);
+                    Toast.makeText(this, extension, Toast.LENGTH_SHORT).show();
+                    NameList.add("." + extension);*/
                 }
-            } finally {
-                cursor.close();
             }
         }
-        if (result == null) {
-            result = uri.getPath();
-            int cut = result.lastIndexOf('/');
-            if (cut != -1) {
-                result = result.substring(cut + 1);
-            }
-        }
-        return result;
     }
-
-
-
 
     private class UploadFile extends AsyncTask<String, Void,String> {
 
@@ -394,6 +425,16 @@ public class UploadFileActivity extends AppCompatActivity {
     }
 
 
+    public String generateRandomString(int length) {
+        Random random = new Random();
+        StringBuilder builder = new StringBuilder(length);
+
+        for (int i = 0; i < length; i++) {
+            builder.append(ALPHABET.charAt(random.nextInt(ALPHABET.length())));
+        }
+
+        return builder.toString();
+    }
 
     public void backBtn(View view) {
         onBackPressed();
