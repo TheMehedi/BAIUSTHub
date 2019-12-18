@@ -222,9 +222,9 @@ public class ExploreFileActivity extends AppCompatActivity {
             LayoutInflater layoutInflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             @SuppressLint("ViewHolder") View row = Objects.requireNonNull(layoutInflater).inflate(R.layout.filelist, parent, false);
 
-            TextView fileName = findViewById(R.id.fileName);
-            TextView deptName = findViewById(R.id.deptName);
-            TextView courseName = findViewById(R.id.courseName);
+            TextView fileName = row.findViewById(R.id.fileName);
+            TextView deptName = row.findViewById(R.id.deptName);
+            TextView courseName = row.findViewById(R.id.courseName);
 
             /*Picasso.with(context).invalidate("http://banglapuzzle.website/wh/assets/backend/images/post/" + rImage[position]);
             Picasso.with(context)
