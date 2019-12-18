@@ -11,10 +11,16 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.github.florent37.expansionpanel.ExpansionLayout;
+import com.github.florent37.expansionpanel.viewgroup.ExpansionLayoutCollection;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,6 +53,9 @@ public class ExploreFileActivity extends AppCompatActivity {
     private String[] mCourseName = null;
     private String[] mDownloadLink = null;
     private ListView listView;
+    private String user_id, rdepartment, rcourse, rteacher, rcategory;
+
+    private ExpansionLayout ex0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +65,107 @@ public class ExploreFileActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("user_details", MODE_PRIVATE);
 
         listView = findViewById(R.id.listView);
+        ex0 = findViewById(R.id.expansionLayout0);
+
+        final ExpansionLayoutCollection expansionLayoutCollection = new ExpansionLayoutCollection();
+        expansionLayoutCollection.add(ex0);
+        //ex0.toggle(true);
+
+        ex0.addListener(new ExpansionLayout.Listener() {
+            @Override
+            public void onExpansionChanged(ExpansionLayout expansionLayout, boolean expanded) {
+
+            }
+        });
+
+
+
+        Spinner mySpinner1 = findViewById(R.id.spinner1);
+        final ArrayAdapter<String> myAdapter1 = new ArrayAdapter<>(ExploreFileActivity.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.department));
+
+        myAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mySpinner1.setAdapter(myAdapter1);
+
+        mySpinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                //record = myAdapter.getItem(position);
+                rdepartment = myAdapter1.getItem(position);
+
+                new FetchData(getApplicationContext(), listView).execute();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+                //record = "All";
+
+            }
+        });
+
+
+
+        Spinner mySpinner2 = findViewById(R.id.spinner2);
+        final ArrayAdapter<String> myAdapter2 = new ArrayAdapter<>(ExploreFileActivity.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.course));
+
+        myAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mySpinner2.setAdapter(myAdapter2);
+
+        mySpinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                //record = myAdapter.getItem(position);
+
+                rcourse = myAdapter2.getItem(position);
+
+                new FetchData(getApplicationContext(), listView).execute();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+                //record = "All";
+
+            }
+        });
+
+
+
+        Spinner mySpinner4 = findViewById(R.id.spinner4);
+        final ArrayAdapter<String> myAdapter4 = new ArrayAdapter<>(ExploreFileActivity.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.file_category));
+
+        myAdapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mySpinner4.setAdapter(myAdapter4);
+
+        mySpinner4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                //record = myAdapter.getItem(position);
+
+                rcategory = myAdapter4.getItem(position);
+
+                new FetchData(getApplicationContext(), listView).execute();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+                //record = "All";
+
+            }
+        });
 
         new FetchData(getApplicationContext(), listView).execute();
+    }
+
+    public void backBtn(View view) {
+        onBackPressed();
     }
 
 
@@ -153,13 +261,101 @@ public class ExploreFileActivity extends AppCompatActivity {
                     String department = JO.getString("department");
                     String course = JO.getString("course");
                     String link = JO.getString("link");
+                    String category = JO.getString("category");
 
 
-                    idList.add(id);
-                    nameList.add(filename);
-                    deptList.add(department);
-                    courseList.add(course);
-                    linkList.add(link);
+                    if(rdepartment.equals(department)){
+
+                        if(rcourse.equals(course)){
+
+                            if(rcategory.equals(category)){
+
+                                idList.add(id);
+                                nameList.add(filename);
+                                deptList.add(department);
+                                courseList.add(course);
+                                linkList.add(link);
+                            }
+
+                            else if(rcategory.equals("")){
+
+                                idList.add(id);
+                                nameList.add(filename);
+                                deptList.add(department);
+                                courseList.add(course);
+                                linkList.add(link);
+                            }
+                        }
+
+                        else if(rcourse.equals("")){
+                            if(rcategory.equals(category)){
+
+                                idList.add(id);
+                                nameList.add(filename);
+                                deptList.add(department);
+                                courseList.add(course);
+                                linkList.add(link);
+                            }
+
+                            else if(rcategory.equals("")){
+
+                                idList.add(id);
+                                nameList.add(filename);
+                                deptList.add(department);
+                                courseList.add(course);
+                                linkList.add(link);
+                            }
+
+                        }
+                    }
+
+
+                    else if(rdepartment.equals("")){
+
+                        if(rcourse.equals(course)){
+
+                            if(rcategory.equals(category)){
+
+                                idList.add(id);
+                                nameList.add(filename);
+                                deptList.add(department);
+                                courseList.add(course);
+                                linkList.add(link);
+                            }
+
+                            else if(rcategory.equals("")){
+
+                                idList.add(id);
+                                nameList.add(filename);
+                                deptList.add(department);
+                                courseList.add(course);
+                                linkList.add(link);
+                            }
+                        }
+
+                        else if(rcourse.equals("")){
+                            if(rcategory.equals(category)){
+
+                                idList.add(id);
+                                nameList.add(filename);
+                                deptList.add(department);
+                                courseList.add(course);
+                                linkList.add(link);
+                            }
+
+                            else if(rcategory.equals("")){
+
+                                idList.add(id);
+                                nameList.add(filename);
+                                deptList.add(department);
+                                courseList.add(course);
+                                linkList.add(link);
+                            }
+
+                        }
+                    }
+
+
 
                     count++;
                 }
@@ -179,6 +375,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                 Parcelable state = listView.onSaveInstanceState();
                 MyAdapter adapter = new MyAdapter(context, mId, mFileName, mDeptName, mCourseName, mDownloadLink);
                 lv.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
                 listView.onRestoreInstanceState(state);
 
             } catch (JSONException e) {
@@ -251,6 +448,26 @@ public class ExploreFileActivity extends AppCompatActivity {
 
             return row;
         }
+    }
+
+    private static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            // pre-condition
+            return;
+        }
+
+        int totalHeight = 0;
+        for (int j = 0; j < listAdapter.getCount(); j++) {
+            View listItem = listAdapter.getView(j, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
     }
 
 }
