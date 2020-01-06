@@ -26,6 +26,21 @@
         <item>Previous Questions</item>
     </string-array>
 
+    <string-array name="file_type1">
+
+        <item></item>
+        <item>Hand Written</item>
+        <item>Class Material</item>
+    </string-array>
+
+    <string-array name="file_type2">
+
+        <item></item>
+        <item>Mid</item>
+        <item>Class Test</item>
+        <item>Final</item>
+    </string-array>
+
 
     <string-array name="teacher">
 
@@ -49,6 +64,13 @@
         <item>English</item>
         <item>Accounting</item>
         <item>Discreate Math</item>
+    </string-array>
+
+
+    <string-array name="account_type">
+
+        <item>Student</item>
+        <item>Faculty</item>
     </string-array>
 
 

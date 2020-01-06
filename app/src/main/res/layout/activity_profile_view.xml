@@ -46,7 +46,7 @@
                             android:background="@drawable/arrow"/>
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:text="My Profile"
                             android:layout_weight="1"
@@ -57,24 +57,22 @@
                         <LinearLayout
                             android:id="@+id/logoutBtn"
                             android:layout_width="48dp"
-                            android:layout_height="48dp"
+                            android:layout_height="match_parent"
                             android:orientation="vertical"
-                            android:layout_gravity="center_vertical">
+                            android:gravity="center">
 
-                            <ImageButton
+                            <ImageView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
-                                android:padding="32dp"
                                 android:layout_marginTop="4dp"
-                                android:layout_marginStart="8dp"
-                                android:background="@drawable/logout"/>
+                                android:src="@drawable/logout"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Logout"
                                 android:textAlignment="center"
-                                android:textSize="12dp"/>
+                                android:textSize="12sp"/>
 
                         </LinearLayout>
 
@@ -149,6 +147,7 @@
                 </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/academicId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
@@ -237,6 +236,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/session"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"

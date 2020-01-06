@@ -29,7 +29,7 @@ import java.nio.charset.StandardCharsets;
 
 public class ProfileViewActivity extends AppCompatActivity {
 
-    private LinearLayout logoutBtn;
+    private LinearLayout logoutBtn, academinId, sessions;
     private TextView myName, myId, myEmail, myDepartment, mySession;
     private SharedPreferences sharedPreferences;
 
@@ -48,6 +48,8 @@ public class ProfileViewActivity extends AppCompatActivity {
         myDepartment = findViewById(R.id.myDepartment);
         mySession = findViewById(R.id.mySession);
         logoutBtn = findViewById(R.id.logoutBtn);
+        academinId = findViewById(R.id.academicId);
+        sessions = findViewById(R.id.session);
 
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
@@ -154,7 +156,14 @@ public class ProfileViewActivity extends AppCompatActivity {
                 final String aid = userObject.getString("aid");
                 final String department = userObject.getString("department");
                 final String session = userObject.getString("session");
+                final String type = userObject.getString("type");
 
+                if(type.equals("Faculty")){
+
+                    academinId.setVisibility(View.GONE);
+                    sessions.setVisibility(View.GONE);
+
+                }
 
                 myName.setText(name);
                 myId.setText(aid);

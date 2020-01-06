@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -84,36 +85,49 @@ public class RegistrationActivity extends AppCompatActivity {
         String personPassword = password.getText().toString();
         String confirmPass = confirmPassword.getText().toString();
 
+        if(isValid(personEmail)){
 
-        if(personPassword.equals(confirmPass)){
+            if(personPassword.equals(confirmPass)){
 
-            if(!TextUtils.isEmpty(personEmail) || !TextUtils.isEmpty(personPassword)){
+                if(!TextUtils.isEmpty(personEmail) || !TextUtils.isEmpty(personPassword)){
 
-                //Toast.makeText(this, personEmail + personPassword + personUserName, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, personEmail + personPassword + personUserName, Toast.LENGTH_SHORT).show();
 
 
-                Intent intent = new Intent(RegistrationActivity.this, ProfileSetupActivity.class);
-                intent.putExtra("email",personEmail);
-                intent.putExtra("password",personPassword);
-                startActivity(intent);
+                    Intent intent = new Intent(RegistrationActivity.this, ProfileSetupActivity.class);
+                    intent.putExtra("email",personEmail);
+                    intent.putExtra("password",personPassword);
+                    startActivity(intent);
 
+                }
+                else{
+
+                    Toast.makeText(this, "Please fill all the field!", Toast.LENGTH_SHORT).show();
+
+                }
             }
+
             else{
 
-                Toast.makeText(this, "Please fill all the field!", Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(this, "Password doesn't match!", Toast.LENGTH_SHORT).show();
             }
         }
 
         else{
 
-            Toast.makeText(this, "Password doesn't match!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Invalid email!", Toast.LENGTH_SHORT).show();
         }
+
+
 
 
 
     }
 
+    boolean isValid(String s){
+
+        return (!TextUtils.isEmpty(s) && Patterns.EMAIL_ADDRESS.matcher(s).matches());
+    }
 
 
     private void SendUserToMainActivity() {

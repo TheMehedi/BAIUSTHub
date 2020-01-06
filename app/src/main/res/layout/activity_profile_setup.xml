@@ -1,21 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".ProfileSetupActivity">
 
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="NAME"
-        android:layout_marginTop="60dp"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:textColor="@color/colorPrimary"/>
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/linearLayoutFileType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="36dp"
+            android:layout_marginEnd="36dp"
+            android:layout_marginTop="64dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_margin="2dp"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:textAllCaps="true"
+                android:textColor="@color/colorPrimary"
+                android:text="Account Types: " />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_margin="2dp"
+                android:background="@drawable/border"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:tag="--Select Category--" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NAME"
+            android:layout_marginTop="32dp"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textColor="@color/colorPrimary"/>
 
 
         <EditText
@@ -32,38 +73,45 @@
 
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ACADEMIC ID"
-        android:layout_marginTop="24dp"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:textColor="@color/colorPrimary"/>
-
-
-
-        <EditText
-            android:id="@+id/id"
+        <LinearLayout
+            android:id="@+id/linearLayoutAID"
             android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:layout_marginStart="36dp"
-            android:layout_marginEnd="36dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ACADEMIC ID"
+                android:layout_marginTop="24dp"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textColor="@color/colorPrimary"/>
+
+
+
+            <EditText
+                android:id="@+id/id"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_marginStart="36dp"
+                android:layout_marginEnd="36dp"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:backgroundTint="@color/colorPrimary"
+                android:inputType="number"/>
+        </LinearLayout>
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="DEPARTMENT"
+            android:layout_marginTop="24dp"
             android:textAlignment="center"
-            android:textColor="@color/colorPrimary"
-            android:backgroundTint="@color/colorPrimary"
-            android:inputType="number"/>
-
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="DEPARTMENT"
-        android:layout_marginTop="24dp"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:textColor="@color/colorPrimary"/>
+            android:textSize="18sp"
+            android:textColor="@color/colorPrimary"/>
 
 
         <EditText
@@ -78,39 +126,49 @@
             android:inputType="text"/>
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="SESSION"
-        android:layout_marginTop="24dp"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:textColor="@color/colorPrimary"/>
+        <LinearLayout
+            android:id="@+id/linearLayoutSession"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SESSION"
+                android:layout_marginTop="24dp"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textColor="@color/colorPrimary"/>
 
 
-    <EditText
-        android:id="@+id/session"
-        android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginEnd="36dp"
-        android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
-        android:backgroundTint="@color/colorPrimary"
-        android:inputType="text"/>
+            <EditText
+                android:id="@+id/session"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_marginStart="36dp"
+                android:layout_marginEnd="36dp"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:backgroundTint="@color/colorPrimary"
+                android:inputType="text"/>
+
+        </LinearLayout>
 
 
-    <Button
-        android:id="@+id/registrationBtn"
-        android:layout_width="220dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="28dp"
-        android:text="Sign up"
-        android:textSize="18sp"
-        android:textColor="@android:color/white"
-        android:background="@drawable/rectangle_bg"
-        android:backgroundTint="@color/colorPrimary"
-        android:layout_gravity="center"/>
+        <Button
+            android:id="@+id/registrationBtn"
+            android:layout_width="220dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="28dp"
+            android:text="Sign up"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/rectangle_bg"
+            android:backgroundTint="@color/colorPrimary"
+            android:layout_gravity="center"/>
 
 
-</LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

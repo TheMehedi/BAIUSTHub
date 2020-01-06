@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,11 +57,13 @@ public class UploadFileActivity extends AppCompatActivity {
     private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private Button chooseFilebtn, uploadBtn;
     private TextView chooseFileText;
-    private String img = "null", user_id, department, course, teacher, category;
+    private String img = "null", user_id, department, course, teacher, category, type = "";
     private ArrayList<Uri> FileList = new ArrayList<>();
     private ArrayList<String> NameList = new ArrayList<>();
     private ArrayList<String> ExtensionList = new ArrayList<>();
     private SharedPreferences sharedPreferences;
+    private LinearLayout linearLayoutFileType;
+    private int counter = 0;
 
 
     @Override
@@ -75,6 +78,7 @@ public class UploadFileActivity extends AppCompatActivity {
         chooseFilebtn = findViewById(R.id.chooseFileBtn);
         chooseFileText = findViewById(R.id.chooseFileText);
         uploadBtn = findViewById(R.id.uploadBtn);
+        linearLayoutFileType = findViewById(R.id.linearLayoutFileType);
 
 
 
@@ -173,12 +177,87 @@ public class UploadFileActivity extends AppCompatActivity {
 
                 category = myAdapter4.getItem(position);
 
+
+                if (category.equals("Presentation Slide")){
+
+                    linearLayoutFileType.setVisibility(View.GONE);
+                }
+
+
+                else if(category.equals("Lecture Notes")){
+
+                    linearLayoutFileType.setVisibility(View.VISIBLE);
+
+                    type = "";
+
+                    Spinner mySpinner5 = findViewById(R.id.spinner5);
+                    final ArrayAdapter<String> myAdapter5 = new ArrayAdapter<>(UploadFileActivity.this,
+                            android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.file_type1));
+
+                    myAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    mySpinner5.setAdapter(myAdapter5);
+
+                    mySpinner5.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                            //record = myAdapter.getItem(position);
+
+                            type = myAdapter5.getItem(position);
+
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                            //record = "All";
+
+                        }
+                    });
+
+                }
+
+                else if(category.equals("Previous Questions")){
+
+                    linearLayoutFileType.setVisibility(View.VISIBLE);
+
+                    type = "";
+
+                    Spinner mySpinner5 = findViewById(R.id.spinner5);
+                    final ArrayAdapter<String> myAdapter5 = new ArrayAdapter<>(UploadFileActivity.this,
+                            android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.file_type2));
+
+                    myAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    mySpinner5.setAdapter(myAdapter5);
+
+                    mySpinner5.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                            //record = myAdapter.getItem(position);
+
+                            type = myAdapter5.getItem(position);
+
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                            //record = "All";
+
+                        }
+                    });
+                }
+
+
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
                 //record = "All";
+                linearLayoutFileType.setVisibility(View.GONE);
+
 
             }
         });
@@ -199,41 +278,91 @@ public class UploadFileActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                if(!department.equals("") && !course.equals("") && !teacher.equals("") && !category.equals("") && FileList != null){
+                if(!department.equals("") && !course.equals("") && !teacher.equals("") && !category.equals("") && counter>0){
 
 
-                    for(int j = 0; j<FileList.size(); j++){
+                    if(category.equals("Lecture Notes") || category.equals("Previous Questions")){
 
-                        Uri PerFile = FileList.get(j);
+                        if (!type.equals("")){
 
-                        final String uniqname = generateRandomString(10) + ExtensionList.get(j);
-                        final String name = NameList.get(j);
+                            for(int j = 0; j<FileList.size(); j++){
 
-                        StorageReference folder = FirebaseStorage.getInstance().getReference().child(department);
-                        final StorageReference filename = folder.child(uniqname);
+                                Uri PerFile = FileList.get(j);
 
-                        //Toast.makeText(UploadFileActivity.this, ExtensionList.get(j), Toast.LENGTH_SHORT).show();
-                        filename.putFile(PerFile).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                final String uniqname = generateRandomString(10) + ExtensionList.get(j);
+                                final String name = NameList.get(j);
 
-                                filename.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                StorageReference folder = FirebaseStorage.getInstance().getReference().child(department);
+                                final StorageReference filename = folder.child(uniqname);
+
+                                //Toast.makeText(UploadFileActivity.this, ExtensionList.get(j), Toast.LENGTH_SHORT).show();
+                                filename.putFile(PerFile).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                     @Override
-                                    public void onSuccess(Uri uri) {
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                                        new UploadFile(getApplicationContext()).execute(uri.toString(), uniqname, name);
+                                        filename.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                            @Override
+                                            public void onSuccess(Uri uri) {
 
-                                        //Toast.makeText(UploadFileActivity.this, uri.toString() + uniqname, Toast.LENGTH_SHORT).show();
+                                                new UploadFile(getApplicationContext()).execute(uri.toString(), uniqname, name);
+
+                                                //Toast.makeText(UploadFileActivity.this, uri.toString() + uniqname, Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+
+
                                     }
                                 });
-
-
                             }
-                        });
+
+                            Toast.makeText(UploadFileActivity.this, "All File Uploaded Successfully!", Toast.LENGTH_SHORT).show();
+                            onBackPressed();
+                        }
+
+                        else{
+
+                            Toast.makeText(UploadFileActivity.this, "Select all field!", Toast.LENGTH_SHORT).show();
+                        }
                     }
 
-                    Toast.makeText(UploadFileActivity.this, "All File Uploaded Successfully!", Toast.LENGTH_SHORT).show();
-                    onBackPressed();
+
+                    else {
+
+                        for(int j = 0; j<FileList.size(); j++){
+
+                            Uri PerFile = FileList.get(j);
+
+                            final String uniqname = generateRandomString(10) + ExtensionList.get(j);
+                            final String name = NameList.get(j);
+
+                            StorageReference folder = FirebaseStorage.getInstance().getReference().child(department);
+                            final StorageReference filename = folder.child(uniqname);
+
+                            //Toast.makeText(UploadFileActivity.this, ExtensionList.get(j), Toast.LENGTH_SHORT).show();
+                            filename.putFile(PerFile).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                                    filename.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+
+                                            new UploadFile(getApplicationContext()).execute(uri.toString(), uniqname, name);
+
+                                            //Toast.makeText(UploadFileActivity.this, uri.toString() + uniqname, Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+
+                                }
+                            });
+                        }
+
+                        Toast.makeText(UploadFileActivity.this, "All File Uploaded Successfully!", Toast.LENGTH_SHORT).show();
+                        onBackPressed();
+                    }
+
+
 
                 }
 
@@ -247,6 +376,8 @@ public class UploadFileActivity extends AppCompatActivity {
 
 
     }
+
+
 
 
     public void checkPermission(){
@@ -286,6 +417,7 @@ public class UploadFileActivity extends AppCompatActivity {
                 if(data.getClipData() != null){
 
                     int count = data.getClipData().getItemCount();
+                    counter = count;
 
                     chooseFileText.setText(count + " files");
 
@@ -321,6 +453,7 @@ public class UploadFileActivity extends AppCompatActivity {
 
                 else {
 
+                    counter = 1;
                     chooseFileText.setText("1 files");
 
                     Uri file = data.getData();
@@ -397,6 +530,7 @@ public class UploadFileActivity extends AppCompatActivity {
                         + "&&" + URLEncoder.encode("course", "UTF-8") + "=" + URLEncoder.encode(course, "UTF-8")
                         + "&&" + URLEncoder.encode("teacher", "UTF-8") + "=" + URLEncoder.encode(teacher, "UTF-8")
                         + "&&" + URLEncoder.encode("category", "UTF-8") + "=" + URLEncoder.encode(category, "UTF-8")
+                        + "&&" + URLEncoder.encode("type", "UTF-8") + "=" + URLEncoder.encode(type, "UTF-8")
                         + "&&" + URLEncoder.encode("uri", "UTF-8") + "=" + URLEncoder.encode(uri, "UTF-8")
                         + "&&" + URLEncoder.encode("uniqname", "UTF-8") + "=" + URLEncoder.encode(uniqname, "UTF-8")
                         + "&&" + URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(name, "UTF-8");
