@@ -1,6 +1,8 @@
 package com.joyti.baiusthub;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,13 +13,18 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.florent37.expansionpanel.ExpansionLayout;
 import com.github.florent37.expansionpanel.viewgroup.ExpansionLayoutCollection;
@@ -52,7 +59,9 @@ public class ExploreFileActivity extends AppCompatActivity {
     private String[] mDeptName = null;
     private String[] mCourseName = null;
     private String[] mDownloadLink = null;
+    private String[] mRating = null;
     private ListView listView;
+    private RatingBar ratingBar;
     private String user_id, rdepartment, rcourse, rteacher, rcategory;
 
     private ExpansionLayout ex0;
@@ -63,6 +72,7 @@ public class ExploreFileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_explore_file);
 
         sharedPreferences = getSharedPreferences("user_details", MODE_PRIVATE);
+        user_id = sharedPreferences.getString("id", null);
 
         listView = findViewById(R.id.listView);
         ex0 = findViewById(R.id.expansionLayout0);
@@ -195,7 +205,6 @@ public class ExploreFileActivity extends AppCompatActivity {
 
 
             StringBuilder result = new StringBuilder();
-            String user = sharedPreferences.getString("id", null);
 
 
             try {
@@ -207,7 +216,7 @@ public class ExploreFileActivity extends AppCompatActivity {
 
                 OutputStream ops = http.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(ops, StandardCharsets.UTF_8));
-                String data = URLEncoder.encode("user_id", "UTF-8") + "=" + URLEncoder.encode(user, "UTF-8");
+                String data = URLEncoder.encode("user_id", "UTF-8") + "=" + URLEncoder.encode(user_id, "UTF-8");
                 writer.write(data);
                 writer.flush();
                 writer.close();
@@ -244,6 +253,7 @@ public class ExploreFileActivity extends AppCompatActivity {
             ArrayList<String> deptList = new ArrayList<>();
             ArrayList<String> courseList = new ArrayList<>();
             ArrayList<String> linkList = new ArrayList<>();
+            ArrayList<String> ratingList = new ArrayList<>();
 
             try {
 
@@ -262,6 +272,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                     String course = JO.getString("course");
                     String link = JO.getString("link");
                     String category = JO.getString("category");
+                    String rating = JO.getString("rating");
 
 
                     if(rdepartment.equals(department)){
@@ -275,6 +286,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 deptList.add(department);
                                 courseList.add(course);
                                 linkList.add(link);
+                                ratingList.add(rating);
                             }
 
                             else if(rcategory.equals("")){
@@ -284,6 +296,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 deptList.add(department);
                                 courseList.add(course);
                                 linkList.add(link);
+                                ratingList.add(rating);
                             }
                         }
 
@@ -295,6 +308,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 deptList.add(department);
                                 courseList.add(course);
                                 linkList.add(link);
+                                ratingList.add(rating);
                             }
 
                             else if(rcategory.equals("")){
@@ -304,6 +318,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 deptList.add(department);
                                 courseList.add(course);
                                 linkList.add(link);
+                                ratingList.add(rating);
                             }
 
                         }
@@ -321,6 +336,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 deptList.add(department);
                                 courseList.add(course);
                                 linkList.add(link);
+                                ratingList.add(rating);
                             }
 
                             else if(rcategory.equals("")){
@@ -330,6 +346,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 deptList.add(department);
                                 courseList.add(course);
                                 linkList.add(link);
+                                ratingList.add(rating);
                             }
                         }
 
@@ -341,6 +358,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 deptList.add(department);
                                 courseList.add(course);
                                 linkList.add(link);
+                                ratingList.add(rating);
                             }
 
                             else if(rcategory.equals("")){
@@ -350,6 +368,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 deptList.add(department);
                                 courseList.add(course);
                                 linkList.add(link);
+                                ratingList.add(rating);
                             }
 
                         }
@@ -366,6 +385,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                 mDeptName =deptList.toArray(new String[0]);
                 mCourseName =courseList.toArray(new String[0]);
                 mDownloadLink =linkList.toArray(new String[0]);
+                mRating =ratingList.toArray(new String[0]);
 
 
 
@@ -373,7 +393,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                 // Save the ListView state (= includes scroll position) as a Parceble
 
                 Parcelable state = listView.onSaveInstanceState();
-                MyAdapter adapter = new MyAdapter(context, mId, mFileName, mDeptName, mCourseName, mDownloadLink);
+                MyAdapter adapter = new MyAdapter(context, mId, mFileName, mDeptName, mCourseName, mDownloadLink, mRating);
                 lv.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 listView.onRestoreInstanceState(state);
@@ -398,8 +418,9 @@ public class ExploreFileActivity extends AppCompatActivity {
         String[] rDept;
         String[] rCourse;
         String[] rLink;
+        String[] rRating;
 
-        MyAdapter(Context context, String[] id, String[] name, String[] dept, String[] course, String[] link){
+        MyAdapter(Context context, String[] id, String[] name, String[] dept, String[] course, String[] link, String[] rating){
             super(context,R.layout.filelist,R.id.fileName,name);
 
             this.context = context;
@@ -408,6 +429,7 @@ public class ExploreFileActivity extends AppCompatActivity {
             this.rDept = dept;
             this.rCourse = course;
             this.rLink = link;
+            this.rRating = rating;
         }
 
 
@@ -422,21 +444,17 @@ public class ExploreFileActivity extends AppCompatActivity {
             TextView fileName = row.findViewById(R.id.fileName);
             TextView deptName = row.findViewById(R.id.deptName);
             TextView courseName = row.findViewById(R.id.courseName);
+            Button downloadBtn = row.findViewById(R.id.downloadBtn);
+            Button ratingBtn = row.findViewById(R.id.ratingBtn);
+            TextView ratingText = row.findViewById(R.id.ratingText);
 
-            /*Picasso.with(context).invalidate("http://banglapuzzle.website/wh/assets/backend/images/post/" + rImage[position]);
-            Picasso.with(context)
-                    .load("http://banglapuzzle.website/wh/assets/backend/images/post/" + rImage[position])
-                    .fit()
-                    .placeholder(R.color.colorPrimaryDarkWhite)
-                    .centerCrop()
-                    .into(postImage);*/
 
             fileName.setText(rName[position]);
             deptName.setText("Dept.: " + rDept[position]);
             courseName.setText("Course: " + rCourse[position]);
+            ratingText.setText("Rating: (" + rRating[position] + ")");
 
-            // ========= Permform Click Event ===================
-            row.setOnClickListener(new View.OnClickListener() {
+            downloadBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -446,8 +464,153 @@ public class ExploreFileActivity extends AppCompatActivity {
                 }
             });
 
+            ratingBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    RatingDialogClass rdd = new RatingDialogClass(ExploreFileActivity.this, rId[position]);
+                    rdd.show();
+
+                }
+            });
+
+            // ========= Permform Click Event ===================
+            row.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    /*Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(rLink[position]));
+                    startActivity(i);*/
+                }
+            });
+
             return row;
         }
+    }
+
+
+    private class RatingDialogClass extends Dialog implements
+            android.view.View.OnClickListener {
+
+        private Activity c;
+        private TextView textView;
+        private Button yes, no;
+        private String id;
+
+        private RatingDialogClass(Activity a, String id) {
+            super(a);
+            // TODO Auto-generated constructor stub
+            this.c = a;
+            this.id = id;
+        }
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            setContentView(R.layout.rating);
+            textView = findViewById(R.id.txt_dialog);
+            yes = findViewById(R.id.btn_yes);
+            yes.setOnClickListener(this);
+            ratingBar = findViewById(R.id.myRating);
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.btn_yes:
+
+                    //String rating = "Rating is :" + ratingBar.getRating();
+                    //Toast.makeText(getActivity(), rating, Toast.LENGTH_LONG).show();
+
+                    new SendRatings(c).execute(user_id, String.valueOf(ratingBar.getRating()),id);
+                    break;
+                default:
+                    break;
+            }
+            dismiss();
+        }
+    }
+
+
+
+    private class SendRatings extends AsyncTask<String, Void,String> {
+
+
+        Context context;
+
+        SendRatings(Context context) {
+            this.context = context;
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+            //dialog = new AlertDialog.Builder(context).create();
+            //dialog.setTitle("Please wait..");
+        }
+
+
+
+        @Override
+        protected String doInBackground(String... parameter) {
+
+            String check_user_url = "http://baiusthub.mygamesonline.org/update_rating.php";
+
+            String uid = parameter[0];
+            String rating = parameter[1];
+            String file_id = parameter[2];
+            StringBuilder result = new StringBuilder();
+
+            try {
+                URL url = new URL(check_user_url);
+                HttpURLConnection http = (HttpURLConnection) url.openConnection();
+                http.setRequestMethod("POST");
+                http.setDoInput(true);
+                http.setDoOutput(true);
+
+                OutputStream ops = http.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(ops, StandardCharsets.UTF_8));
+                String data = URLEncoder.encode("user_id", "UTF-8") + "=" + URLEncoder.encode(uid, "UTF-8")
+                        +"&&"+URLEncoder.encode("rating", "UTF-8") + "=" + URLEncoder.encode(rating, "UTF-8")
+                        +"&&"+URLEncoder.encode("file_id", "UTF-8") + "=" + URLEncoder.encode(file_id, "UTF-8");
+                writer.write(data);
+                writer.flush();
+                writer.close();
+                ops.close();
+
+                InputStream ips = http.getInputStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(ips, StandardCharsets.ISO_8859_1));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    result.append(line);
+                }
+                reader.close();
+                ips.close();
+                http.disconnect();
+                return result.toString();
+
+
+            } catch (IOException e) {
+                result = new StringBuilder(Objects.requireNonNull(e.getMessage()));
+            }
+
+
+            return result.toString();
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+
+
+
+        }
+
     }
 
     private static void setListViewHeightBasedOnChildren(ListView listView) {
