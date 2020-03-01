@@ -60,6 +60,7 @@ public class ExploreFileActivity extends AppCompatActivity {
     private String[] mCourseName = null;
     private String[] mDownloadLink = null;
     private String[] mRating = null;
+    private String[] mCounter = null;
     private ListView listView;
     private RatingBar ratingBar;
     private String user_id, rdepartment, rcourse, rteacher, rcategory;
@@ -254,6 +255,7 @@ public class ExploreFileActivity extends AppCompatActivity {
             ArrayList<String> courseList = new ArrayList<>();
             ArrayList<String> linkList = new ArrayList<>();
             ArrayList<String> ratingList = new ArrayList<>();
+            ArrayList<String> counterList = new ArrayList<>();
 
             try {
 
@@ -273,6 +275,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                     String link = JO.getString("link");
                     String category = JO.getString("category");
                     String rating = JO.getString("rating");
+                    String counter = JO.getString("counter");
 
 
                     if(rdepartment.equals(department)){
@@ -287,6 +290,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 courseList.add(course);
                                 linkList.add(link);
                                 ratingList.add(rating);
+                                counterList.add(counter);
                             }
 
                             else if(rcategory.equals("")){
@@ -297,6 +301,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 courseList.add(course);
                                 linkList.add(link);
                                 ratingList.add(rating);
+                                counterList.add(counter);
                             }
                         }
 
@@ -309,6 +314,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 courseList.add(course);
                                 linkList.add(link);
                                 ratingList.add(rating);
+                                counterList.add(counter);
                             }
 
                             else if(rcategory.equals("")){
@@ -319,6 +325,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 courseList.add(course);
                                 linkList.add(link);
                                 ratingList.add(rating);
+                                counterList.add(counter);
                             }
 
                         }
@@ -337,6 +344,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 courseList.add(course);
                                 linkList.add(link);
                                 ratingList.add(rating);
+                                counterList.add(counter);
                             }
 
                             else if(rcategory.equals("")){
@@ -347,6 +355,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 courseList.add(course);
                                 linkList.add(link);
                                 ratingList.add(rating);
+                                counterList.add(counter);
                             }
                         }
 
@@ -359,6 +368,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 courseList.add(course);
                                 linkList.add(link);
                                 ratingList.add(rating);
+                                counterList.add(counter);
                             }
 
                             else if(rcategory.equals("")){
@@ -369,6 +379,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 courseList.add(course);
                                 linkList.add(link);
                                 ratingList.add(rating);
+                                counterList.add(counter);
                             }
 
                         }
@@ -386,6 +397,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                 mCourseName =courseList.toArray(new String[0]);
                 mDownloadLink =linkList.toArray(new String[0]);
                 mRating =ratingList.toArray(new String[0]);
+                mCounter =counterList.toArray(new String[0]);
 
 
 
@@ -393,7 +405,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                 // Save the ListView state (= includes scroll position) as a Parceble
 
                 Parcelable state = listView.onSaveInstanceState();
-                MyAdapter adapter = new MyAdapter(context, mId, mFileName, mDeptName, mCourseName, mDownloadLink, mRating);
+                MyAdapter adapter = new MyAdapter(context, mId, mFileName, mDeptName, mCourseName, mDownloadLink, mRating, mCounter);
                 lv.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 listView.onRestoreInstanceState(state);
@@ -419,8 +431,9 @@ public class ExploreFileActivity extends AppCompatActivity {
         String[] rCourse;
         String[] rLink;
         String[] rRating;
+        String[] rCounter;
 
-        MyAdapter(Context context, String[] id, String[] name, String[] dept, String[] course, String[] link, String[] rating){
+        MyAdapter(Context context, String[] id, String[] name, String[] dept, String[] course, String[] link, String[] rating, String[] counter){
             super(context,R.layout.filelist,R.id.fileName,name);
 
             this.context = context;
@@ -430,6 +443,7 @@ public class ExploreFileActivity extends AppCompatActivity {
             this.rCourse = course;
             this.rLink = link;
             this.rRating = rating;
+            this.rCounter = counter;
         }
 
 
@@ -452,7 +466,16 @@ public class ExploreFileActivity extends AppCompatActivity {
             fileName.setText(rName[position]);
             deptName.setText("Dept.: " + rDept[position]);
             courseName.setText("Course: " + rCourse[position]);
-            ratingText.setText("Rating: (" + rRating[position] + ")");
+            if(Integer.parseInt(rCounter[position])>0){
+
+                ratingText.setText("Rating: (" + (Double.parseDouble(rRating[position])/Integer.parseInt(rCounter[position])) + ")");
+            }
+
+            else {
+
+
+                ratingText.setText("Rating: (" + "0.0" + ")");
+            }
 
             downloadBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
