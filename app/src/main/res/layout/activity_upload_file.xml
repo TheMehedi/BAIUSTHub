@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Upload File"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
 
@@ -37,8 +37,8 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
+        android:layout_height="0.5dp"
+        android:background="@color/colorPrimary" />
 
 
     <LinearLayout
@@ -53,7 +53,7 @@
             android:layout_height="36dp"
             android:layout_margin="2dp"
             android:gravity="center"
-            android:text="Department: " />
+            android:text="Department:  " />
 
 
         <LinearLayout
@@ -85,7 +85,7 @@
             android:layout_height="36dp"
             android:layout_margin="2dp"
             android:gravity="center"
-            android:text="Course: " />
+            android:text="Course ID:       " />
 
 
         <LinearLayout
@@ -118,7 +118,7 @@
             android:layout_height="36dp"
             android:layout_margin="2dp"
             android:gravity="center"
-            android:text="Teacher: " />
+            android:text="Teacher:          " />
 
 
         <LinearLayout
@@ -130,6 +130,39 @@
 
             <Spinner
                 android:id="@+id/spinner3"
+                style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:tag="--Select Category--" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_margin="2dp"
+            android:gravity="center"
+            android:text="Semester:        " />
+
+
+        <LinearLayout
+            android:layout_width="220dp"
+            android:layout_height="36dp"
+            android:layout_margin="2dp"
+            android:background="@drawable/border"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/spinner6"
                 style="@style/Widget.AppCompat.DropDownItem.Spinner"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -185,7 +218,7 @@
             android:layout_height="36dp"
             android:layout_margin="2dp"
             android:gravity="center"
-            android:text="File Types: " />
+            android:text="File Types:        " />
 
 
         <LinearLayout
@@ -210,7 +243,7 @@
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:orientation="horizontal">
 
         <TextView
@@ -218,12 +251,12 @@
             android:layout_height="36dp"
             android:layout_margin="2dp"
             android:gravity="center"
-            android:text="Select File: " />
+            android:text="Select File:        " />
 
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="220dp"
+            android:layout_height="36dp"
             android:layout_marginEnd="16sp"
             android:background="@drawable/border">
 
@@ -231,7 +264,7 @@
                 android:id="@+id/chooseFileText"
                 android:layout_width="0dp"
                 android:layout_height="36dp"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:gravity="center" />
 
@@ -240,8 +273,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="4dp"
+                android:backgroundTint="@color/colorAccent"
+                android:textColor="@android:color/white"
+                android:layout_marginStart="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:text="Choose File" />

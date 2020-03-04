@@ -15,19 +15,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ExploreFileActivity"></activity>
-        <activity android:name=".UploadFileActivity" />
-        <activity android:name=".ProfileViewActivity" />
-        <activity android:name=".ProfileSetupActivity" />
-        <activity android:name=".RegistrationActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".WelcomeActivity">
+        <activity android:name=".IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ExploreFileActivity" />
+        <activity android:name=".UploadFileActivity" />
+        <activity android:name=".ProfileViewActivity" />
+        <activity android:name=".ProfileSetupActivity" />
+        <activity android:name=".RegistrationActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".WelcomeActivity"/>
         <activity android:name=".MainActivity" />
 
         <uses-library

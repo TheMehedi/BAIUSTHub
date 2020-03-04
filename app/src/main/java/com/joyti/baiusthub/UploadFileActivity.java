@@ -57,7 +57,7 @@ public class UploadFileActivity extends AppCompatActivity {
     private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private Button chooseFilebtn, uploadBtn;
     private TextView chooseFileText;
-    private String img = "null", user_id, department, course, teacher, category, type = "";
+    private String img = "null", user_id, department, course, teacher, category,semester, type = "";
     private ArrayList<Uri> FileList = new ArrayList<>();
     private ArrayList<String> NameList = new ArrayList<>();
     private ArrayList<String> ExtensionList = new ArrayList<>();
@@ -149,6 +149,31 @@ public class UploadFileActivity extends AppCompatActivity {
                 //record = myAdapter.getItem(position);
 
                 teacher = myAdapter3.getItem(position);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+                //record = "All";
+
+            }
+        });
+
+        Spinner mySpinner6 = findViewById(R.id.spinner6);
+        final ArrayAdapter<String> myAdapter6 = new ArrayAdapter<>(UploadFileActivity.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.semester));
+
+        myAdapter6.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mySpinner6.setAdapter(myAdapter6);
+
+        mySpinner6.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                //record = myAdapter.getItem(position);
+
+                semester = myAdapter6.getItem(position);
 
             }
 
@@ -278,7 +303,7 @@ public class UploadFileActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                if(!department.equals("") && !course.equals("") && !teacher.equals("") && !category.equals("") && counter>0){
+                if(!department.equals("") && !course.equals("") && !teacher.equals("") && !category.equals("") && !semester.equals("") && counter>0){
 
 
                     if(category.equals("Lecture Notes") || category.equals("Previous Questions")){
@@ -530,6 +555,7 @@ public class UploadFileActivity extends AppCompatActivity {
                         + "&&" + URLEncoder.encode("course", "UTF-8") + "=" + URLEncoder.encode(course, "UTF-8")
                         + "&&" + URLEncoder.encode("teacher", "UTF-8") + "=" + URLEncoder.encode(teacher, "UTF-8")
                         + "&&" + URLEncoder.encode("category", "UTF-8") + "=" + URLEncoder.encode(category, "UTF-8")
+                        + "&&" + URLEncoder.encode("semester", "UTF-8") + "=" + URLEncoder.encode(semester, "UTF-8")
                         + "&&" + URLEncoder.encode("type", "UTF-8") + "=" + URLEncoder.encode(type, "UTF-8")
                         + "&&" + URLEncoder.encode("uri", "UTF-8") + "=" + URLEncoder.encode(uri, "UTF-8")
                         + "&&" + URLEncoder.encode("uniqname", "UTF-8") + "=" + URLEncoder.encode(uniqname, "UTF-8")

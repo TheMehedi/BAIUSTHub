@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,8 +27,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.eyalbira.loadingdots.LoadingDots;
 import com.github.florent37.expansionpanel.ExpansionLayout;
 import com.github.florent37.expansionpanel.viewgroup.ExpansionLayoutCollection;
+import com.roger.catloadinglibrary.CatLoadingView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,6 +47,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -64,6 +68,8 @@ public class ExploreFileActivity extends AppCompatActivity {
     private ListView listView;
     private RatingBar ratingBar;
     private String user_id, rdepartment, rcourse, rteacher, rcategory;
+    private CatLoadingView mView;
+
 
     private ExpansionLayout ex0;
 
@@ -71,6 +77,8 @@ public class ExploreFileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore_file);
+
+        mView = new CatLoadingView();
 
         sharedPreferences = getSharedPreferences("user_details", MODE_PRIVATE);
         user_id = sharedPreferences.getString("id", null);
@@ -172,6 +180,8 @@ public class ExploreFileActivity extends AppCompatActivity {
             }
         });
 
+        mView.show(getSupportFragmentManager(), "");
+
         new FetchData(getApplicationContext(), listView).execute();
     }
 
@@ -249,13 +259,13 @@ public class ExploreFileActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
 
+
             ArrayList<String> idList = new ArrayList<>();
             ArrayList<String> nameList = new ArrayList<>();
             ArrayList<String> deptList = new ArrayList<>();
             ArrayList<String> courseList = new ArrayList<>();
             ArrayList<String> linkList = new ArrayList<>();
             ArrayList<String> ratingList = new ArrayList<>();
-            ArrayList<String> counterList = new ArrayList<>();
 
             try {
 
@@ -275,7 +285,6 @@ public class ExploreFileActivity extends AppCompatActivity {
                     String link = JO.getString("link");
                     String category = JO.getString("category");
                     String rating = JO.getString("rating");
-                    String counter = JO.getString("counter");
 
 
                     if(rdepartment.equals(department)){
@@ -290,7 +299,6 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 courseList.add(course);
                                 linkList.add(link);
                                 ratingList.add(rating);
-                                counterList.add(counter);
                             }
 
                             else if(rcategory.equals("")){
@@ -301,7 +309,6 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 courseList.add(course);
                                 linkList.add(link);
                                 ratingList.add(rating);
-                                counterList.add(counter);
                             }
                         }
 
@@ -314,7 +321,6 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 courseList.add(course);
                                 linkList.add(link);
                                 ratingList.add(rating);
-                                counterList.add(counter);
                             }
 
                             else if(rcategory.equals("")){
@@ -325,7 +331,6 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 courseList.add(course);
                                 linkList.add(link);
                                 ratingList.add(rating);
-                                counterList.add(counter);
                             }
 
                         }
@@ -344,7 +349,6 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 courseList.add(course);
                                 linkList.add(link);
                                 ratingList.add(rating);
-                                counterList.add(counter);
                             }
 
                             else if(rcategory.equals("")){
@@ -355,7 +359,6 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 courseList.add(course);
                                 linkList.add(link);
                                 ratingList.add(rating);
-                                counterList.add(counter);
                             }
                         }
 
@@ -368,7 +371,6 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 courseList.add(course);
                                 linkList.add(link);
                                 ratingList.add(rating);
-                                counterList.add(counter);
                             }
 
                             else if(rcategory.equals("")){
@@ -379,7 +381,6 @@ public class ExploreFileActivity extends AppCompatActivity {
                                 courseList.add(course);
                                 linkList.add(link);
                                 ratingList.add(rating);
-                                counterList.add(counter);
                             }
 
                         }
@@ -397,7 +398,6 @@ public class ExploreFileActivity extends AppCompatActivity {
                 mCourseName =courseList.toArray(new String[0]);
                 mDownloadLink =linkList.toArray(new String[0]);
                 mRating =ratingList.toArray(new String[0]);
-                mCounter =counterList.toArray(new String[0]);
 
 
 
@@ -405,7 +405,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                 // Save the ListView state (= includes scroll position) as a Parceble
 
                 Parcelable state = listView.onSaveInstanceState();
-                MyAdapter adapter = new MyAdapter(context, mId, mFileName, mDeptName, mCourseName, mDownloadLink, mRating, mCounter);
+                MyAdapter adapter = new MyAdapter(context, mId, mFileName, mDeptName, mCourseName, mDownloadLink, mRating);
                 lv.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 listView.onRestoreInstanceState(state);
@@ -431,9 +431,11 @@ public class ExploreFileActivity extends AppCompatActivity {
         String[] rCourse;
         String[] rLink;
         String[] rRating;
-        String[] rCounter;
 
-        MyAdapter(Context context, String[] id, String[] name, String[] dept, String[] course, String[] link, String[] rating, String[] counter){
+
+        DecimalFormat dec = new DecimalFormat("#0.0");
+
+        MyAdapter(Context context, String[] id, String[] name, String[] dept, String[] course, String[] link, String[] rating){
             super(context,R.layout.filelist,R.id.fileName,name);
 
             this.context = context;
@@ -443,7 +445,6 @@ public class ExploreFileActivity extends AppCompatActivity {
             this.rCourse = course;
             this.rLink = link;
             this.rRating = rating;
-            this.rCounter = counter;
         }
 
 
@@ -466,14 +467,13 @@ public class ExploreFileActivity extends AppCompatActivity {
             fileName.setText(rName[position]);
             deptName.setText("Dept.: " + rDept[position]);
             courseName.setText("Course: " + rCourse[position]);
-            if(Integer.parseInt(rCounter[position])>0){
 
-                ratingText.setText("Rating: (" + (Double.parseDouble(rRating[position])/Integer.parseInt(rCounter[position])) + ")");
+
+            if(!rRating[position].equals("")){
+
+                ratingText.setText("Rating: (" + dec.format(Double.parseDouble(rRating[position])) + ")");
             }
-
             else {
-
-
                 ratingText.setText("Rating: (" + "0.0" + ")");
             }
 
@@ -508,6 +508,7 @@ public class ExploreFileActivity extends AppCompatActivity {
                 }
             });
 
+            mView.dismiss();
             return row;
         }
     }
@@ -630,7 +631,9 @@ public class ExploreFileActivity extends AppCompatActivity {
 
             Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
 
-
+            if(!s.equals("")){
+                new FetchData(getApplicationContext(), listView).execute();
+            }
 
         }
 

@@ -27,7 +27,7 @@
                 android:text="BAIUST Hub"
                 android:layout_weight="1"
                 android:textStyle="bold"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:layout_gravity="center"/>
 
             <ImageButton
@@ -43,8 +43,8 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
+        android:layout_height="0.5dp"
+        android:background="@color/colorPrimary"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
 
     <LinearLayout
@@ -81,14 +81,15 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="16dp"
                     android:src="@drawable/file_explore"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Explore file"
-                    android:layout_margin="8dp"
+                    android:textSize="16sp"
+                    android:layout_margin="16dp"
                     android:layout_gravity="center"/>
 
             </LinearLayout>
@@ -111,14 +112,15 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="16sp"
                     android:src="@drawable/file_upload"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Upload file"
-                    android:layout_margin="8dp"
+                    android:layout_margin="16dp"
+                    android:textSize="16sp"
                     android:layout_gravity="center"/>
 
             </LinearLayout>
@@ -148,14 +150,15 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="16sp"
                     android:src="@drawable/about_app"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="About app"
-                    android:layout_margin="8dp"
+                    android:layout_margin="16dp"
+                    android:textSize="16sp"
                     android:layout_gravity="center"/>
 
             </LinearLayout>
