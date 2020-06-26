@@ -11,9 +11,8 @@
         <item>CSE</item>
         <item>EEE</item>
         <item>CE</item>
-        <item>BA</item>
+        <item>DBA</item>
         <item>English</item>
-        <item>SH</item>
         <item>Law</item>
 
     </string-array>
@@ -45,10 +44,19 @@
     <string-array name="teacher">
 
         <item></item>
-        <item>Mamun</item>
-        <item>Ibrahim</item>
-        <item>Abdus Sattar</item>
-        <item>Sheikh Hasan</item>
+        <item>Mamun Ahmad</item>
+        <item>Robaitul Islam</item>
+        <item>Shahed Khan</item>
+        <item>Hani</item>
+        <item>Shimu Sultana</item>
+        <item>Nuri</item>
+        <item>Saddam Hossian</item>
+        <item>Fazle Rabbi</item>
+        <item>Saha Reno</item>
+        <item>Sharmin Sultana</item>
+        <item>Partha</item>
+        <item>Raimon Nahar</item>
+        <item>And so on</item>
         <item>And so on</item>
 
     </string-array>
@@ -58,12 +66,19 @@
 
         <item></item>
         <item>Algorithm</item>
-        <item>Data Structure</item>
-        <item>EEE 1</item>
+        <item>System analysis</item>
+        <item>Graphics</item>
+        <item>EEE</item>
         <item>Computer Fundamental</item>
         <item>English</item>
         <item>Accounting</item>
-        <item>Discreate Math</item>
+        <item>DLD</item>
+        <item>C++</item>
+        <item>eithcs</item>
+        <item>Vlsi design</item>
+        <item>Chemistry</item>
+
+
     </string-array>
 
 
